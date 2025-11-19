@@ -1,0 +1,29 @@
+.slick-next:before, .slick-prev:before {
+  content: '' !important;
+}
+.slick-prev {
+  left: -59px;
+}
+.slick-next {
+  right: -59px;
+}
+
+.wishlist-heart:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 1250px) {
+  .slick-prev {
+    left: 29px;
+  }
+  .slick-next {
+    right: 29px;
+  }
+  
+}
+
+@media (max-width: 749px) {
+  .slick-prev, .slick-next {
+    display: none !important;
+  }
+}
