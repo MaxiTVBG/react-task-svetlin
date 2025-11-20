@@ -15,3 +15,30 @@ body {
   background-color: #f0f2f5; /* Light gray background */
   color: #333;
 }
+
+.swiper-button-next-custom {
+  position: absolute;
+  top: 50%;
+  right: -5rem;
+  background-color: #EEF7FB;
+  transform: translateY(-50%);
+  z-index: 10;
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2022L5%2044l-2.1-2.1L22.8%2022%202.9%202.1%205%200l22%2022z'%20fill%3D'%23000000'%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 16px 16px;
+  border-radius: 50%;
+}
+
+@media (max-width: 1320px) {
+  .swiper-button-next-custom {
+    display: none;
+  }
+}
+
+.swiper-pagination-container {
+  margin-top: -1rem;
+}
