@@ -70,14 +70,14 @@ function QuestionPage() {
 
       {/* Container for Question, Answers, and Navigation */}
       <div className="absolute  top-40 lg:top-[352px] left-1/2 -translate-x-1/2 w-full">
-        <main className="w-full max-w-4xl flex flex-col items-center text-center mx-auto">
+        <main className="w-full max-w-4xl flex flex-col items-center text-center mx-auto pl-4 pr-4">
           {/* Question */}
           <h2 className="text-4xl font-bricolage text-gray-700 mb-4">
             {currentQuestion.question}
           </h2>
 
           {/* Answer Options */}
-          <div className="flex flex-wrap justify-center gap-2.5 gap-0 my-10">
+          <div className="flex flex-wrap justify-center gap-2.5 p-4 my-10">
             {currentQuestion.options.map((option, index) => (
               <button
                 key={option.value}
