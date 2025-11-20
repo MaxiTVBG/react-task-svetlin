@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import StartPage from './StartPage.jsx';
-import QuestionPage from './QuestionPage.jsx';
-import ResultsPage from './ResultsPage.jsx'; // Import ResultsPage
+
+const StartPage = lazy(() => import('./StartPage.jsx'));
+const QuestionPage = lazy(() => import('./QuestionPage.jsx'));
+const ResultsPage = lazy(() => import('./ResultsPage.jsx'));
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<StartPage />} />
-        <Route path="/question/:id" element={<QuestionPage />} />
-        <Route path="/results" element={<ResultsPage />} /> {/* Add ResultsPage route */}
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<StartPage />} />
+          <Route path="/question/:id" element={<QuestionPage />} />
+          <Route path="/results" element={<ResultsPage />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

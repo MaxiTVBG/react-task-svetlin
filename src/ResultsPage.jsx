@@ -248,7 +248,7 @@ function ResultsPage() {
 
   return (
     <div className="main-results-wrapper relative min-h-screen">
-      <div className="results-page-container w-screen min-h-[539px] bg-[url('/assets/ba1b5feec77ec1fc9d27c36047d092f5787f5336.jpg')] bg-cover bg-center bg-no-repeat bg-black/40 bg-blend-multiply flex flex-col items-center p-8">
+      <div className="results-page-container w-screen min-h-[539px] bg-[url('/assets/ba1b5feec77ec1fc9d27c36047d092f5787f5336.webp')] bg-cover bg-center bg-no-repeat bg-black/40 bg-blend-multiply flex flex-col items-center p-8">
         <div className="results-content-wrapper max-w-[583px] mt-8 mx-auto  flex flex-col items-center justify-around p-8 text-white text-center">
           <h2 className="font-bricolage font-semibold text-[40px] leading-[110%] tracking-normal text-center mb-8">
             Build you everyday self care routine.

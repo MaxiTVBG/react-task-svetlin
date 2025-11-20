@@ -77,7 +77,7 @@ function QuestionPage() {
           </h2>
 
           {/* Answer Options */}
-          <div className="flex flex-wrap justify-center gap-2.5 p-4 my-10">
+          <div className="flex flex-wrap justify-center gap-2.5 p-4 my-1">
             {currentQuestion.options.map((option, index) => (
               <button
                 key={option.value}
