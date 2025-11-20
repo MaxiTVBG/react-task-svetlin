@@ -1,15 +1,37 @@
 .slick-next:before, .slick-prev:before {
   content: '' !important;
 }
+
 .slick-prev {
   left: -59px;
 }
+
 .slick-next {
   right: -59px;
 }
 
 .wishlist-heart:hover {
   transform: scale(1.1);
+}
+
+/* Fix for slick slider track to prevent stretching */
+.slick-track {
+  display: flex !important;
+  align-items: stretch;
+}
+
+.slick-slide {
+  height: auto !important;
+  float: none !important;
+}
+
+.slick-slide > div {
+  height: 100%;
+}
+
+/* Ensure consistent card heights */
+.slick-list {
+  overflow: hidden;
 }
 
 @media (max-width: 1250px) {
@@ -19,11 +41,17 @@
   .slick-next {
     right: 29px;
   }
-  
 }
 
 @media (max-width: 749px) {
   .slick-prev, .slick-next {
     display: none !important;
+  }
+  .slick-slide {
+    width: 100% !important;
+  }
+  
+  .slick-track {
+    display: flex !important;
   }
 }

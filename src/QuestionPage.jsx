@@ -63,13 +63,13 @@ function QuestionPage() {
     <div className="min-h-screen bg-white font-sans relative p-4">
       {/* Responsive container for Progress Bar */}
       <div
-        className="absolute top-[200px] left-1/2 -translate-x-1/2 w-full flex justify-center 
+        className="absolute top-10 left-1/2 -translate-x-1/2 w-full flex justify-center 
         lg:top-[352px] lg:left-auto lg:right-24 lg:w-auto lg:translate-x-0">
         <ProgressBar current={questionId} total={questions.length} />
       </div>
 
       {/* Container for Question, Answers, and Navigation */}
-      <div className="absolute top-[352px] left-1/2 -translate-x-1/2 w-full">
+      <div className="absolute  top-40 lg:top-[352px] left-1/2 -translate-x-1/2 w-full">
         <main className="w-full max-w-4xl flex flex-col items-center text-center mx-auto">
           {/* Question */}
           <h2 className="text-4xl font-bricolage text-gray-700 mb-4">
@@ -77,7 +77,7 @@ function QuestionPage() {
           </h2>
 
           {/* Answer Options */}
-          <div className="flex flex-wrap justify-center gap-2.5 my-10">
+          <div className="flex flex-wrap justify-center gap-2.5 gap-0 my-10">
             {currentQuestion.options.map((option, index) => (
               <button
                 key={option.value}

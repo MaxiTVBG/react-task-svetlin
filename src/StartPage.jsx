@@ -10,10 +10,10 @@ function StartPage() {
   return (
     <div className="start-page-background h-[526px] top-0 w-screen flex items-center justify-center bg-cover bg-center bg-no-repeat bg-black/40 bg-blend-multiply">
       <div className="w-full max-w-[583px] bg-transparent px-8 flex flex-col items-center text-center">
-        <h1 className="text-5xl max-h-[88px] mb-4 text-white size-40px font-bricolade">
+        <h1 className="text-4xl sm:text-5xl mb-3 text-white size-40px font-bricolade leading-tight">
           Build a self care routine suitable for you
         </h1>
-        <p className="text-[16px] mb-6 text-white font-montserrat">
+        <p className="text-[16px] mb-4 text-white font-montserrat">
           Take out test to get a personalised self care routine based on your needs.
         </p>
         <Link to="/question/1">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -112,6 +112,7 @@ function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const sliderRef = useRef(null);
   const [wishlist, setWishlist] = useState(() => {
     const savedWishlist = localStorage.getItem('wishlist');
     return savedWishlist ? JSON.parse(savedWishlist) : [];
@@ -150,6 +151,39 @@ function ResultsPage() {
     fetchAndFilterProducts();
   }, [wishlist]);
 
+  // Force slider to reinitialize after products load and on window resize
+  useEffect(() => {
+    if (!loading && sliderRef.current) {
+      const timer = setTimeout(() => {
+        if (sliderRef.current) {
+          sliderRef.current.slickGoTo(0);
+        }
+      }, 50);
+      return () => clearTimeout(timer);
+    }
+  }, [loading, products]);
+
+  // Fix slick slider width calculation on mount
+  useEffect(() => {
+    const handleResize = () => {
+      if (sliderRef.current) {
+        sliderRef.current.slickGoTo(sliderRef.current.innerSlider.state.currentSlide);
+      }
+    };
+
+    // Trigger resize after a short delay to fix initial mobile render
+    const timer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+    }, 100);
+
+    window.addEventListener('resize', handleResize);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const toggleWishlist = (productId) => {
     const newWishlist = wishlist.includes(productId)
       ? wishlist.filter((id) => id !== productId)
@@ -175,6 +209,8 @@ function ResultsPage() {
     prevArrow: <SamplePrevArrow />,
     vertical: false,
     verticalSwiping: false,
+    initialSlide: 0,
+    lazyLoad: 'ondemand',
     responsive: [
       {
         breakpoint: 1024,
@@ -195,6 +231,8 @@ function ResultsPage() {
           dots: true,
           infinite: availableSlides > 1,
           swipeToSlide: true,
+          centerMode: false,
+          variableWidth: false,
         },
       },
     ],
@@ -229,59 +267,63 @@ function ResultsPage() {
           </button>        </div>
       </div>
       <div className="z-10 w-full max-w-[1122px] mx-auto md:mt-[-79px] mt-8 relative px-4">
-        <Slider {...settings}>
-          <div className="w-[350px] h-[420px] px-[18px]">
-            <div className="w-full rounded-lg opacity-100 bg-[#EEF7FB] border border-gray-200 shadow-md p-4 flex flex-col justify-center min-h-[420px]">
-              <h3 className="font-bricolage font-semibold text-[24px] leading-[110%] tracking-[0%] text-center mb-2 text-gray-800">
-                Daily routine
-              </h3>
-              <p className="font-montserrat font-normal text-[16px] leading-[150%] tracking-[0%] text-center mb-2 text-gray-900">
-                Perfect for if you're looking for soft, nourished skin, our moisturizing body washes are made with
-                skin-natural nutrients that work with your skin to replenish moisture. With a light formula, the bubbly
-                lather leaves your skin feeling cleansed and cared for. And by choosing relaxing fragrances you can add a
-                moment of calm to the end of your day.
-              </p>
+        <Slider ref={sliderRef} {...settings}>
+          <div>
+            <div className="px-[18px]">
+              <div className="w-full h-[420px] rounded-lg opacity-100 bg-[#EEF7FB] border border-gray-200 shadow-md p-4 flex flex-col justify-center overflow-hidden">
+                <h3 className="font-bricolage font-semibold text-[24px] leading-[110%] tracking-[0%] text-center mb-2 text-gray-800">
+                  Daily routine
+                </h3>
+                <p className="font-montserrat font-normal text-[16px] leading-[150%] tracking-[0%] text-center mb-2 text-gray-900">
+                  Perfect for if you're looking for soft, nourished skin, our moisturizing body washes are made with
+                  skin-natural nutrients that work with your skin to replenish moisture. With a light formula, the bubbly
+                  lather leaves your skin feeling cleansed and cared for. And by choosing relaxing fragrances you can add a
+                  moment of calm to the end of your day.
+                </p>
+              </div>
             </div>
           </div>
           {products.map((product) => (
-            <div key={product.id} className="px-[18px]">
-              <div className="w-full h-[420px] opacity-100 flex flex-col justify-between relative">
-                {product.images && product.images[0] && (
-                  <div className="relative bg-white rounded-t-lg">
-                    <img
-                      src={product.images[0].src}
-                      alt={product.title}
-                      className="w-full max-h-[345px] h-[345px] object-contain rounded-md "
-                    />
-                    <button
-                      onClick={() => toggleWishlist(product.id)}
-                      className="wishlist-heart absolute top-2 right-2 bg-white rounded-full p-2"
-                      style={{ transition: 'all 0.2s ease-in-out' }}
-                    >
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill={wishlist.includes(product.id) ? 'red' : 'none'}
-                        xmlns="http://www.w3.org/2000/svg"
-                        style={{ transition: 'fill 0.2s ease-in-out' }}
+            <div key={product.id}>
+              <div className="px-[18px]">
+                <div className="w-full h-[420px] opacity-100 flex flex-col justify-between relative overflow-hidden">
+                  {product.images && product.images[0] && (
+                    <div className="relative bg-white rounded-t-lg">
+                      <img
+                        src={product.images[0].src}
+                        alt={product.title}
+                        className="w-full max-h-[345px] h-[345px] object-contain rounded-md "
+                      />
+                      <button
+                        onClick={() => toggleWishlist(product.id)}
+                        className="wishlist-heart absolute top-2 right-2 bg-white rounded-full p-2"
+                        style={{ transition: 'all 0.2s ease-in-out' }}
                       >
-                        <path
-                          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                          stroke="#000"
-                          strokeWidth="2"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill={wishlist.includes(product.id) ? 'red' : 'none'}
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{ transition: 'fill 0.2s ease-in-out' }}
+                        >
+                          <path
+                            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                            stroke="#000"
+                            strokeWidth="2"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                  <div className="w-full flex flex-col items-center mx-auto pt-2 p-4">
+                    <h3 className="w-full h-[25.5px] overflow-hidden font-bricolage text-[24px] font-semibold leading-[110%] text-center mb-1 text-gray-800">
+                      {truncateString(product.title, 24)}
+                    </h3>
+                    <p className="font-montserrat text-center m-h-[25.5px] text-lg text-gray-900 mb-1">
+                      {product.variants[0]?.price ? `$${product.variants[0].price}` : 'N/A'}
+                    </p>
                   </div>
-                )}
-                <div className="w-full flex flex-col items-center mx-auto pt-2 p-4">
-                  <h3 className="w-full h-[25.5px] overflow-hidden font-bricolage text-[24px] font-semibold leading-[110%] text-center mb-1 text-gray-800">
-                    {truncateString(product.title, 24)}
-                  </h3>
-                  <p className="font-montserrat text-center m-h-[25.5px] text-lg text-gray-900 mb-1">
-                    {product.variants[0]?.price ? `$${product.variants[0].price}` : 'N/A'}
-                  </p>
                 </div>
               </div>
             </div>
